@@ -31,22 +31,22 @@ class Craftsman
     builder = Builder::XmlMarkup.new(:indent => 2)
     xml = builder.movie(:service => 'craftsman-1.0') do |movie|
       movie.body do |body|
-        body.stack do |stack|
+   #     body.stack do |stack|
 
           duration = 0
           @image_urls.each do |image_url|
 
-            stack.effect(:type => EFFECTS[rand(EFFECTS.size)], :duration => duration += 4 ) do |effect|
+            body.effect(:type => EFFECTS[rand(EFFECTS.size)], :duration => duration += 4 ) do |effect|
               effect.image(:filename => image_url )
             end
           end
 
-          stack.audio(:filename => 'http://www.jesusjones.com/cvremixes/CultureVultureInvisibleSystemSubRemix.mp3', :fadeout => '2')
+   #       stack.audio(:filename => 'http://www.jesusjones.com/cvremixes/CultureVultureInvisibleSystemSubRemix.mp3', :fadeout => '2')
 
-          stack.text("Text text text!", :type => 'legend')
+   #       stack.text("Text text text!", :type => 'legend')
 
         end
-      end
+   #   end
     end
   end
 

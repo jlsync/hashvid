@@ -1,0 +1,15 @@
+== Welcome to hashvid
+
+
+You'll need an update-to-date flickr_fu
+
+   gem sources -a http://gems.github.com
+   sudo gem install commonthread-flickr_fu
+
+create a config/flickr.yml file that has your flickr api key and
+looks like this:
+
+  key: 'ce10c78532e1fd..........'
+  secret: '00184......'
+
+
