@@ -33,10 +33,10 @@ class Craftsman
       movie.body do |body|
    #     body.stack do |stack|
 
-          duration = 0
+          duration = 4
           @image_urls.each do |image_url|
 
-            body.effect(:type => EFFECTS[rand(EFFECTS.size)], :duration => duration += 4 ) do |effect|
+            body.effect(:type => EFFECTS[rand(EFFECTS.size)], :duration => duration ) do |effect|
               effect.image(:filename => image_url )
             end
           end
