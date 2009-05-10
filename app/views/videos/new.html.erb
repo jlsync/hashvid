@@ -1,0 +1,20 @@
+<h1>Videos#new</h1>
+
+<% form_tag :action => 'create' do -%>
+
+  <label for="video_date_from">Date From</label><br />
+  <%= date_select "video", "date_from", :start_year => 2006, :use_month_numbers => true %>
+  <br/>
+
+  <label for="video_date_to">Date To</label><br />
+  <%= date_select "video", "date_to", :start_year => 2006, :use_month_numbers => true %>
+  <br/>
+
+  <label for="video_search_text">Search Text</label><br />
+  <%= text_field "video", "search_text", :max_length => 100 %>
+  <br/>
+
+  <%= submit_tag "Submit" %>
+
+
+<% end -%>
