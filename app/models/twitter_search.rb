@@ -14,12 +14,11 @@ class TwitterSearch
   end
 
 
-  def self.search(text, from , to  )
-    search = Twitter::Search.new(text).since_date(from).until_date(to)
+  def self.search(text, date_from , date_to  )
+    search = Twitter::Search.new(text).since_date(date_from).until_date(date_to)
      
     #puts '*'*50, 'First Run', '*'*50
-    #search.each { |result| puts result.inspect }
-    search.fetch
+    search.each { |result| puts result.inspect }
   end
 
 end
