@@ -19,11 +19,47 @@ class Video < ActiveRecord::Base  #WithoutTable
     twits = TwitterSearch.search(search_text, date_from.to_s, date_to.to_s )
     pics =  FlickrSearch.search(search_text, date_from.to_s, date_to.to_s )
 
+    #  can't search twitter down to each hour, so let's bucket them now.
+    twit_buckets = {}
+    twits.each do |twit|
+      hour_start = DateTime.parse(twit.created_at).strftime("%Y-%m-%d %H:00:00")
+      (twit_buckets[hour_start] ||= [] ) << twit
+    end
+
+    # do the same with pictures
+    pics_buckets = {}
+    pics.each do |pic|
+      hour_start = pic.taken_at.strftime("%Y-%m-%d %H:00:00")
+      (pics_buckets[hour_start] ||= [] ) << pic
+    end
+    
     @craftsman = Craftsman.new
 
-    pics.each do |pic|
-      @craftsman.image_urls << pic.url(:original)
+    (twit_buckets.keys + pics_buckets.keys).uniq.sort_by{|x| DateTime.parse(x)}.each do |hour_key|
+
+      @craftsman.add_stack do
+        if pics_buckets[hour_key]
+          @craftsman.add_sequence do
+            pics_buckets[hour_key].each do |pic|
+              @craftsman.add_flickr_pic(pic)
+            end
+          end
+        end
+
+        if twit_buckets[hour_key]
+          @craftsman.add_sequence do
+            twit_buckets[hour_key].each do |tweet|
+              @craftsman.add_tweet(tweet)
+            end
+          end
+        end
+
+      end
+
     end
+    
+    # add credits...
+
 
   end
 
