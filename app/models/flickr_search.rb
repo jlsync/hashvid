@@ -5,7 +5,7 @@ class FlickrSearch
     flickr = Flickr.new(RAILS_ROOT + '/config/flickr.yml')
 
     flickr.photos.search(
-      :license => "1, 2, 4, 5, 7",
+      :license => "1,2,4,5,6,7", # no spaces allowed in this list
       :text => text,
       :sort => "relevance",
       :min_taken_date => (date_from.is_a?(String) ? date_from : date_from.strftime("%Y-%m-%d")) +  " 00:00:00",

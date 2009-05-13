@@ -44,12 +44,21 @@ class Craftsman
     @current = remember
   end
 
+  def add_comment(text)
+    # how to with REXML?
+  end
+
   def add_flickr_pic(pic)
     @current.add_element("effect", 'type' => EFFECTS[rand(EFFECTS.size)], 'duration' => @duration).add_element("image", 'filename' => pic.url(:original) )
   end
 
   def add_tweet(tweet)
     @current.add_element("text", 'type' => 'legend').add_text( tweet.from_user + ": " + tweet.text )
+  end
+
+  def add_legend(text, options = {} )
+    height = options[:height] || 0.1
+    @current.add_element("text", 'type' => 'legend', 'height' => height).add_text(text)
   end
 
 

@@ -22,20 +22,22 @@ class Video < ActiveRecord::Base  #WithoutTable
     #  can't search twitter down to each hour, so let's bucket them now.
     twit_buckets = {}
     twits.each do |twit|
-      hour_start = DateTime.parse(twit.created_at).strftime("%Y-%m-%d %H:00:00")
+      hour_start = DateTime.parse(twit.created_at).utc.strftime("%Y-%m-%d %H:00:00")
       (twit_buckets[hour_start] ||= [] ) << twit
     end
 
     # do the same with pictures
     pics_buckets = {}
     pics.each do |pic|
-      hour_start = pic.taken_at.strftime("%Y-%m-%d %H:00:00")
+      hour_start = pic.taken_at.utc.strftime("%Y-%m-%d %H:00:00")
       (pics_buckets[hour_start] ||= [] ) << pic
     end
     
     @craftsman = Craftsman.new
 
     (twit_buckets.keys + pics_buckets.keys).uniq.sort_by{|x| DateTime.parse(x)}.each do |hour_key|
+
+      @craftsman.add_comment(hour_key) # todo
 
       @craftsman.add_stack do
         if pics_buckets[hour_key]
@@ -59,6 +61,11 @@ class Video < ActiveRecord::Base  #WithoutTable
     end
     
     # add credits...
+    credits = "made by hashvid
+    http://github.com/jlsync/hashvid/tree/master"
+    @craftsman.add_sequence do
+      @craftsman.add_legend(credits, :height => 1.0)
+    end
 
 
   end
