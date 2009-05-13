@@ -1,4 +1,3 @@
-
 class Video < ActiveRecord::Base  #WithoutTable
   #column :search_text, :string
   #column :date_from, :date
@@ -18,6 +17,7 @@ class Video < ActiveRecord::Base  #WithoutTable
 
     twits = TwitterSearch.search(search_text, date_from.to_s, date_to.to_s )
     pics =  FlickrSearch.search(search_text, date_from.to_s, date_to.to_s )
+
 
     #  can't search twitter down to each hour, so let's bucket them now.
     twit_buckets = {}
@@ -43,7 +43,7 @@ class Video < ActiveRecord::Base  #WithoutTable
         if pics_buckets[hour_key]
           @craftsman.add_sequence do
             pics_buckets[hour_key].each do |pic|
-              @craftsman.add_flickr_pic(pic)
+              @craftsman.add_pic(pic.url(:original))
             end
           end
         end
@@ -51,7 +51,7 @@ class Video < ActiveRecord::Base  #WithoutTable
         if twit_buckets[hour_key]
           @craftsman.add_sequence do
             twit_buckets[hour_key].each do |tweet|
-              @craftsman.add_tweet(tweet)
+              @craftsman.add_legend(tweet.from_user + ": " + tweet.text)
             end
           end
         end
@@ -61,7 +61,9 @@ class Video < ActiveRecord::Base  #WithoutTable
     end
     
     # add credits...
-    credits = "made by hashvid
+    credits = "flickr photos:\n" +
+    pics.map{|p| p.owner_name + " - " + p.url_photopage}.join("\n") +
+    "made by hashvid
     http://github.com/jlsync/hashvid/tree/master"
     @craftsman.add_sequence do
       @craftsman.add_legend(credits, :height => 1.0)
